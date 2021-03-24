@@ -1,19 +1,19 @@
-# Fixed-point iteration for solution of the Bratu equation
-# u''=exp(-u), u(-1)=u(1)=0
+# Fixed-point iteration for solution of the nonlinear Poisson equation
+# u''= alpha f(u), u(-1)=u(1)=0
 
 import numpy.linalg as npla
 import numpy as np
 import scipy.sparse as sp
 from FDLaplacian1D import FDLaplacian1D
 
-alpha = 0.5
+alpha = 2.5
 
 # Set up an m by m matrix for FD discretization of the Laplacian
 m = 5
 K = FDLaplacian1D(-1.0, 1.0, m).todense()
 
 # Set initial guess
-u0 = -np.ones(m)
+u0 = np.ones(m)
 
 # Fixed point iteration
 tol = 1.0e-6
@@ -21,7 +21,7 @@ maxIter = 100
 conv = False
 
 for i in range(maxIter):
-  g = alpha*np.exp(-u0)
+  g = alpha*np.cos(u0)
   u1 = npla.solve(K, g)
   print('u[%d]=' % i, u1)
   r = npla.norm(u0 - u1)
